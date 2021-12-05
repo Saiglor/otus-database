@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using Otus.Models.Models;
 using Otus.PostgreSql;
 
 namespace Otus.Application
@@ -17,6 +20,18 @@ namespace Otus.Application
             WriteItemTypes(db);
             Console.WriteLine();
             WriteItems(db);
+
+            try
+            {
+                var newItem = ReadNewItem();
+                db.Items.Add(newItem);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return;
+            }
 
             Console.WriteLine("Успешно!");
         }
@@ -68,6 +83,46 @@ namespace Otus.Application
             {
                 Console.WriteLine(item.GetString());
             }
+        }
+
+        private static ItemModel ReadNewItem()
+        {
+            var newItem = new ItemModel();
+            const BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
+            var properties = typeof(ItemModel).GetProperties(bindingFlags).Where(t => !t.GetAccessors()[0].IsVirtual);
+            Console.WriteLine("Добавить новое объявление:");
+            foreach (var prop in properties)
+            {
+                Console.WriteLine(prop.Name);
+                var val = Console.ReadLine();
+                
+                while (string.IsNullOrEmpty(val))
+                {
+                    Console.WriteLine(prop.Name);
+                    val = Console.ReadLine();
+                }
+
+                switch (prop.PropertyType)
+                {
+                    case var t when t == typeof(Guid):
+                        prop.SetValue(newItem, Guid.Parse(val));
+                        break;
+                    case var t when t == typeof(string):
+                        prop.SetValue(newItem, val);
+                        break;
+                    case var t when t == typeof(int):
+                        prop.SetValue(newItem, int.Parse(val));
+                        break;
+                    case var t when t == typeof(bool):
+                        prop.SetValue(newItem, bool.Parse(val));
+                        break;
+                    case var t when t == typeof(DateTime):
+                        prop.SetValue(newItem, DateTime.ParseExact(val, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+                        break;
+                }
+            }
+
+            return newItem;
         }
     }
 }
