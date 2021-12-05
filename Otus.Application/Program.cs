@@ -39,8 +39,7 @@ namespace Otus.Application
 
             foreach (var user in users)
             {
-                Console.WriteLine(
-                    $"|{user.Id,37}|{user.Name,20}|{user.Email,20}|{user.PhoneNumber,15}|{user.IsCompany,10}|{user.RegistrationDate,20}|");
+                Console.WriteLine(user.GetString());
             }
         }
 
@@ -53,8 +52,7 @@ namespace Otus.Application
 
             foreach (var type in types)
             {
-                Console.WriteLine(
-                    $"|{type.Id,37}|{type.ParentItemTypeId,37}|{type.Name,20}|");
+                Console.WriteLine(type.GetString());
             }
         }
 
@@ -68,9 +66,7 @@ namespace Otus.Application
             
             foreach (var item in items)
             {
-                Console.WriteLine(
-                    $"|{item.Id,37}|{item.Title,20}|{item.Description,35}|{item.Price,8}|{item.SellerId,37}|{item.ItemTypeId,37}|" +
-                    $"{item.PublicationDate,20}|{item.NumberOfViews,14}|{item.IsClose,10}|");
+                Console.WriteLine(item.GetString());
             }
         }
     }

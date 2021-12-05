@@ -13,5 +13,10 @@ namespace Otus.Models.Models
         public DateTime RegistrationDate { get; set; }
 
         public virtual ICollection<ItemModel> Items { get; set; }
+
+        public string GetString()
+        {
+            return $"|{Id,37}|{Name,20}|{Email,20}|{PhoneNumber,15}|{IsCompany,10}|{RegistrationDate,20}|";
+        }
     }
 }

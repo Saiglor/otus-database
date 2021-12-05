@@ -16,5 +16,11 @@ namespace Otus.Models.Models
 
         public virtual ClientProfileModel Seller { get; set; }
         public virtual ItemTypeModel ItemType { get; set; }
+
+        public string GetString()
+        {
+            return
+                $"|{Id,37}|{Title,20}|{Description,35}|{Price,8}|{SellerId,37}|{ItemTypeId,37}|{PublicationDate,20}|{NumberOfViews,14}|{IsClose,10}|";
+        }
     }
 }

@@ -13,5 +13,10 @@ namespace Otus.Models.Models
 
         public virtual ICollection<ItemModel> Items { get; set; }
         public virtual ICollection<ItemTypeModel> ChildItemTypes { get; set; }
+
+        public string GetString()
+        {
+            return $"|{Id,37}|{ParentItemTypeId,37}|{Name,20}|";
+        }
     }
 }
